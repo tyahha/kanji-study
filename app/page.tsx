@@ -1,6 +1,7 @@
 'use client'
 
 import {useRouter} from "next/navigation"
+import {Button} from "@/components/Button"
 
 export default function Home() {
   const router = useRouter();
@@ -10,7 +11,10 @@ export default function Home() {
   return (
     <main>
       <h1 className="text-9xl text-center">漢字の勉強</h1>
-      <button className="bg-gray-400 hover:bg-gray-600 py-2 px-4 rounded" onClick={startAtFirst}>初めから</button>
+      <div className="flex justify-center gap-1">
+        <Button onClick={startAtFirst}>初めから</Button>
+        <Button onClick={startAtFirst}>続きから</Button>
+      </div>
     </main>
   )
 }

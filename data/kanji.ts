@@ -13,5 +13,11 @@ export const KanjiData: Kanji[] = [
     kana: "モンダイ",
     kanji: "問題",
     questionType: "write",
-  }
+  },
+  {
+    sentence: "{}の問題",
+    kana: "つぎ",
+    kanji: "次",
+    questionType: "write",
+  },
 ]
