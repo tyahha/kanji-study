@@ -8,7 +8,7 @@ type Props = {
   index: number;
 }
 export const KanjiQuestion = ({data, index}: Props) => {
-  const [s1, s2] = data.sentence.split("{}");
+  const [s1, s2] = data.sentence.split("*");
   const [isThinking, setIsThinking] = useState(true)
   const toggleThinking = () => setIsThinking(!isThinking);
   const word = useMemo(() => {
