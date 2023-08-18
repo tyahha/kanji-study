@@ -52,7 +52,7 @@ export const KanjiQuestion = ({data, index}: Props) => {
         </div>
       </div>
       <div className="mt-4">
-        <Link className="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded" href={"/kanji/" + nextIndex}>次に進む</Link>
+        <Link className="bg-blue-200 hover:bg-blue-300 py-2 px-4 rounded" href={"/kanji/" + nextIndex}>次に進む</Link>
       </div>
       <div className="mt-4">
         <Link href="/" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">タイトルに戻る</Link>
