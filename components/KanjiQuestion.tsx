@@ -18,7 +18,7 @@ export const KanjiQuestion = ({data, index}: Props) => {
 
   return <main className="flex justify-center">
     <section className="w-11/12 text-center">
-      <h2 className="text-left text-xl">問題：</h2>
+      <h2 className="text-left text-xl">問題{index + 1}：</h2>
       <p className="bg-white text-center py-4">
         <span className="text-3xl">{s1} </span>
         <span className="font-bold underline text-3xl">{word}</span>
