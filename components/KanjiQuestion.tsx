@@ -91,7 +91,7 @@ export const KanjiQuestion = ({data, index}: Props) => {
               history.history.map(h => {
                 const date = new Date(h.datetime);
                 const str = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' +('0' + date.getDate()).slice(-2)
-                return <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                return <tr key={h.datetime} className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {str}
                   </th>
