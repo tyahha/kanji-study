@@ -1,4 +1,4 @@
-import {Kanji} from "@/data/kanji"
+import { Kanji } from "@/data/kanji"
 
 export const KanjiData1: Kanji[] = [
   {

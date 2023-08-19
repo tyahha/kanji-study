@@ -1,15 +1,12 @@
-import {KanjiData1} from "@/data/kanji001"
+import { KanjiData1 } from "@/data/kanji001"
 
-type QuestionType = 'read' | 'write';
+type QuestionType = "read" | "write"
 
 export type Kanji = {
-  sentence: string;
-  kanji: string;
-  kana: string;
-  questionType: QuestionType;
+  sentence: string
+  kanji: string
+  kana: string
+  questionType: QuestionType
 }
 
-export const KanjiData: Kanji[] = [
-  ...KanjiData1,
-]
-
+export const KanjiData: Kanji[] = [...KanjiData1]
