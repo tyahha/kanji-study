@@ -1,33 +1,33 @@
-import {Kanji, KanjiData} from "@/data/kanji"
+import {Kanji} from "@/data/kanji"
 import Link from "next/link"
-import {Button} from "@/components/Button"
 import {useMemo, useState} from "react"
 import {getHistory, saveHistory} from "@/logics/history"
 import {useRouter} from "next/navigation"
 
 type Props = {
   data: Kanji;
-  index: number;
+  onPrev: () => void;
+  onNext: () => void;
+  onReturnTitle: () => void;
 }
-export const KanjiQuestion = ({data, index}: Props) => {
+export const KanjiQuestion = ({data, onPrev, onNext, onReturnTitle}: Props) => {
   const [s1, s2] = data.sentence.split("*");
   const [status, setStatus] = useState<'thinking' | 'result'>('thinking')
   const word = useMemo(() => {
     return status === 'thinking' ? data.questionType === "write" ? data.kana : data.kanji : data.questionType === "write" ? data.kanji : data.kana
   }, [status, data])
-  const nextIndex = index + 2;
 
   const router = useRouter();
   const saveResult = (isCollect: boolean) => {
     saveHistory(data, isCollect);
-    router.push("/kanji/" + nextIndex)
+    onNext();
   }
 
   const history = useMemo(() => getHistory(data), [data]);
 
   return <main className="flex justify-center">
     <section className="w-11/12 text-center">
-      <h2 className="text-left text-4xl">問題{index + 1}：</h2>
+      <h2 className="text-left text-4xl">問題：</h2>
       <p className="bg-white text-center py-16">
         <span className="text-6xl">{s1} </span>
         <span className="font-bold underline text-6xl">{word}</span>
@@ -67,8 +67,25 @@ export const KanjiQuestion = ({data, index}: Props) => {
       </div>
       <div className="mt-4">
       </div>
-      <div className="mt-4">
-        <Link href="/" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">タイトルに戻る</Link>
+      <div className="mt-4 flex gap-8 justify-center">
+        <button
+          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          onClick={onPrev}
+        >
+          ＜＜＜前に戻る
+        </button>
+        <button
+          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          onClick={onReturnTitle}
+        >
+          タイトルに戻る
+        </button>
+        <button
+          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          onClick={onNext}
+        >
+          次に進む＞＞＞
+        </button>
       </div>
       <div className="relative overflow-x-auto shadow-md mt-8 w-fit m-auto min-w-8">
         <table className="text-sm text-left text-gray-500 dark:text-gray-400">
