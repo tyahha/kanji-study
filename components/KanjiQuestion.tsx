@@ -28,17 +28,17 @@ export const KanjiQuestion = ({data, index}: Props) => {
   return <main className="flex justify-center">
     <section className="w-11/12 text-center">
       <h2 className="text-left text-4xl">問題{index + 1}：</h2>
-      <p className="bg-white text-center py-4">
-        <span className="text-8xl">{s1} </span>
-        <span className="font-bold underline text-9xl">{word}</span>
-        <span className="text-8xl"> {s2}</span>
+      <p className="bg-white text-center py-16">
+        <span className="text-6xl">{s1} </span>
+        <span className="font-bold underline text-6xl">{word}</span>
+        <span className="text-6xl"> {s2}</span>
       </p>
       <div className="mt-4">
         {
           status === 'thinking'
             ? (
               <button
-                className={`bg-blue-500 text-white font-bold py-8 rounded hover:bg-blue-700 text-6xl w-1/2`}
+                className={`bg-blue-500 text-white font-bold py-4 rounded hover:bg-blue-700 text-4xl w-1/2`}
                 onClick={() => setStatus('result')}
                 disabled={status !== 'thinking'}
               >
@@ -49,14 +49,14 @@ export const KanjiQuestion = ({data, index}: Props) => {
               <div className="flex gap-4 justify-center">
                 <button
                   disabled={status !== 'result'}
-                  className={`bg-green-500 text-white font-bold py-6 w-1/3 text-6xl rounded hover:bg-green-700`}
+                  className={`bg-green-500 hover:bg-green-700 text-white font-bold py-6 w-1/2 text-4xl rounded`}
                   onClick={() => saveResult(true)}
                 >
                   ◎あたった
                 </button>
                 <button
                   disabled={status !== 'result'}
-                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-6 w-1/3 text-6xl rounded hover:bg-green-700'`}
+                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-6 w-1/2 text-4xl rounded'`}
                   onClick={() => saveResult(false)}
                 >
                   ✖はずれた
