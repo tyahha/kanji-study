@@ -2,6 +2,7 @@ import {Kanji, KanjiData} from "@/data/kanji"
 import Link from "next/link"
 import {Button} from "@/components/Button"
 import {useMemo, useState} from "react"
+import {getHistory, saveHistory} from "@/logics/history"
 
 type Props = {
   data: Kanji;
@@ -9,12 +10,18 @@ type Props = {
 }
 export const KanjiQuestion = ({data, index}: Props) => {
   const [s1, s2] = data.sentence.split("*");
-  const [isThinking, setIsThinking] = useState(true)
-  const toggleThinking = () => setIsThinking(!isThinking);
+  const [status, setStatus] = useState<'thinking' | 'result' | 'goNext'>('thinking')
   const word = useMemo(() => {
-    return isThinking ? data.questionType === "write" ? data.kana : data.kanji : data.questionType === "write" ? data.kanji : data.kana
-  }, [isThinking, data])
+    return status === 'thinking' ? data.questionType === "write" ? data.kana : data.kanji : data.questionType === "write" ? data.kanji : data.kana
+  }, [status, data])
   const nextIndex = index + 2;
+
+  const saveResult = (isCollect: boolean) => {
+    saveHistory(data, isCollect);
+    setStatus('goNext');
+  }
+
+  const history = useMemo(() => getHistory(data), [data]);
 
   return <main className="flex justify-center">
     <section className="w-11/12 text-center">
@@ -25,37 +32,85 @@ export const KanjiQuestion = ({data, index}: Props) => {
         <span className="text-3xl"> {s2}</span>
       </p>
       <div className="mt-4">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={toggleThinking}
-        >
-          {isThinking ? '答えを見る' : '問題に戻る'}
-        </button>
+        {
+          status === 'thinking'
+            ? (
+              <button
+                className={`bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700`}
+                onClick={() => setStatus('result')}
+                disabled={status !== 'thinking'}
+              >
+                答えを見る
+              </button>
+
+            ) :
+            status === 'result' ? (
+              <div className="flex gap-4 justify-center">
+                <button
+                  disabled={status !== 'result'}
+                  className={`bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700`}
+                  onClick={() => saveResult(true)}
+                >
+                  ◎あたった
+                </button>
+                <button
+                  disabled={status !== 'result'}
+                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hover:bg-green-700'`}
+                  onClick={() => saveResult(false)}
+                >
+                  ✖はずれた
+                </button>
+              </div>
+            ) : (
+              <div className="mt-4">
+                <Link className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700" href={"/kanji/" + nextIndex}>次に進む</Link>
+              </div>
+
+            )
+        }
       </div>
       <div className="mt-4">
-        <h2>答え合わせ結果</h2>
-        <div className="flex gap-4 justify-center">
-        <button
-          disabled={isThinking}
-          className={`bg-green-500 text-white font-bold py-2 px-4 rounded ${isThinking ? "opacity-30" : 'hover:bg-green-700'}`}
-          onClick={toggleThinking}
-        >
-          ◎あたり
-        </button>
-        <button
-          disabled={isThinking}
-          className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ${isThinking ? "opacity-30" : 'hover:bg-green-700'}`}
-          onClick={toggleThinking}
-        >
-          ✖はずれ
-        </button>
-        </div>
-      </div>
-      <div className="mt-4">
-        <Link className="bg-blue-200 hover:bg-blue-300 py-2 px-4 rounded" href={"/kanji/" + nextIndex}>次に進む</Link>
       </div>
       <div className="mt-4">
         <Link href="/" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">タイトルに戻る</Link>
+      </div>
+      <div className="relative overflow-x-auto shadow-md mt-8 w-fit m-auto min-w-8">
+        <table className="text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" className="px-6 py-3">
+              履歴
+            </th>
+            <th scope="col" className="px-6 py-3">
+              ◎✖
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+            {
+              history.history.map(h => {
+                const date = new Date(h.datetime);
+                const str = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' +('0' + date.getDate()).slice(-2)
+                return <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {str}
+                  </th>
+                  <td className="px-6 py-4">
+                    {h.isCorrect ? '◎' : '✖'}
+                  </td>
+                </tr>
+              })
+            }
+            <tr>
+              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                合計
+              </th>
+              <td className="px-6 py-4">
+                ◎：{history.history.filter(h => h.isCorrect).length}, ✖：{history.history.filter(h => !h.isCorrect).length}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
   </main>
