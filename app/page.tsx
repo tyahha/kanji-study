@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { TitleView } from "@/components/Title"
 import { useState } from "react"
 import { QuestionView } from "@/components/QuestionView"

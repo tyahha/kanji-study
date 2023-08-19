@@ -1,5 +1,4 @@
 import { Kanji } from "@/data/kanji"
-import Link from "next/link"
 import { useMemo, useState } from "react"
 import { getHistory, saveHistory } from "@/logics/history"
 import { useRouter } from "next/navigation"

@@ -1,5 +1,5 @@
 import { Kanji } from "@/data/kanji"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { KanjiQuestion } from "@/components/KanjiQuestion"
 
 type Props = {
