@@ -3,6 +3,7 @@ import Link from "next/link"
 import {Button} from "@/components/Button"
 import {useMemo, useState} from "react"
 import {getHistory, saveHistory} from "@/logics/history"
+import {useRouter} from "next/navigation"
 
 type Props = {
   data: Kanji;
@@ -10,62 +11,57 @@ type Props = {
 }
 export const KanjiQuestion = ({data, index}: Props) => {
   const [s1, s2] = data.sentence.split("*");
-  const [status, setStatus] = useState<'thinking' | 'result' | 'goNext'>('thinking')
+  const [status, setStatus] = useState<'thinking' | 'result'>('thinking')
   const word = useMemo(() => {
     return status === 'thinking' ? data.questionType === "write" ? data.kana : data.kanji : data.questionType === "write" ? data.kanji : data.kana
   }, [status, data])
   const nextIndex = index + 2;
 
+  const router = useRouter();
   const saveResult = (isCollect: boolean) => {
     saveHistory(data, isCollect);
-    setStatus('goNext');
+    router.push("/kanji/" + nextIndex)
   }
 
   const history = useMemo(() => getHistory(data), [data]);
 
   return <main className="flex justify-center">
     <section className="w-11/12 text-center">
-      <h2 className="text-left text-xl">問題{index + 1}：</h2>
+      <h2 className="text-left text-4xl">問題{index + 1}：</h2>
       <p className="bg-white text-center py-4">
-        <span className="text-3xl">{s1} </span>
-        <span className="font-bold underline text-3xl">{word}</span>
-        <span className="text-3xl"> {s2}</span>
+        <span className="text-8xl">{s1} </span>
+        <span className="font-bold underline text-9xl">{word}</span>
+        <span className="text-8xl"> {s2}</span>
       </p>
       <div className="mt-4">
         {
           status === 'thinking'
             ? (
               <button
-                className={`bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700`}
+                className={`bg-blue-500 text-white font-bold py-8 rounded hover:bg-blue-700 text-6xl w-1/2`}
                 onClick={() => setStatus('result')}
                 disabled={status !== 'thinking'}
               >
                 答えを見る
               </button>
 
-            ) :
-            status === 'result' ? (
+            ) : (
               <div className="flex gap-4 justify-center">
                 <button
                   disabled={status !== 'result'}
-                  className={`bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700`}
+                  className={`bg-green-500 text-white font-bold py-6 w-1/3 text-6xl rounded hover:bg-green-700`}
                   onClick={() => saveResult(true)}
                 >
                   ◎あたった
                 </button>
                 <button
                   disabled={status !== 'result'}
-                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hover:bg-green-700'`}
+                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-6 w-1/3 text-6xl rounded hover:bg-green-700'`}
                   onClick={() => saveResult(false)}
                 >
                   ✖はずれた
                 </button>
               </div>
-            ) : (
-              <div className="mt-4">
-                <Link className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700" href={"/kanji/" + nextIndex}>次に進む</Link>
-              </div>
-
             )
         }
       </div>
