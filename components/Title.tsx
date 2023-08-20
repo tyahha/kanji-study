@@ -20,14 +20,34 @@ const pickWrongs = (day: dayjs.Dayjs) => {
   return ret
 }
 
+const pickRecentWrongs = (day: dayjs.Dayjs) => {
+  const histories = loadHistories()
+  const ret: Kanji[] = []
+  const baseDay = day.format("YYYYMMDD")
+  Object.entries(histories).forEach(([id, history]) => {
+    const kanji = KanjiData.find((k) => k.id === id)
+    if (
+      kanji &&
+      history.length > 0 &&
+      !history[0].isCorrect &&
+      baseDay === dayjs(history[0].datetime).format("YYYYMMDD")
+    ) {
+      ret.push(kanji)
+    }
+  })
+  return ret
+}
+
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
-  const [{ indexForContinue, todayWrongs, yesterdayWrongs }, setState] = useState<{
+  const [{ indexForContinue, recentWrongs, todayWrongs, yesterdayWrongs }, setState] = useState<{
     indexForContinue: number
+    recentWrongs: Kanji[]
     todayWrongs: Kanji[]
     yesterdayWrongs: Kanji[]
   }>({
     indexForContinue: 0,
+    recentWrongs: [],
     todayWrongs: [],
     yesterdayWrongs: [],
   })
@@ -37,6 +57,7 @@ export const TitleView = () => {
     const continueIndex = index + 1
     setState({
       indexForContinue: KanjiData.length <= continueIndex ? 0 : continueIndex,
+      recentWrongs: pickRecentWrongs(dayjs()),
       todayWrongs: pickWrongs(dayjs()),
       yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
     })
@@ -71,6 +92,21 @@ export const TitleView = () => {
         </button>
       </div>
       <h2 className="text-center mt-16 text-4xl">復習</h2>
+      <div className="flex justify-center gap-1 mt-4">
+        <button
+          disabled={todayWrongs.length === 0}
+          onClick={() => {
+            setQuestions(recentWrongs)
+            setIndex(0)
+            setMode("review")
+          }}
+          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+            todayWrongs.length === 0 ? "opacity-50" : "hover:bg-green-700"
+          }`}
+        >
+          直前に間違えたところ
+        </button>
+      </div>
       <div className="flex justify-center gap-1 mt-4">
         <button
           disabled={todayWrongs.length === 0}
