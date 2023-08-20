@@ -36,7 +36,7 @@ export const TitleView = () => {
     const index = KanjiData.findIndex((k) => k.id === id) || 0
     const continueIndex = index + 1
     setState({
-      indexForContinue: KanjiData.length ? 0 : continueIndex,
+      indexForContinue: KanjiData.length <= continueIndex ? 0 : continueIndex,
       todayWrongs: pickWrongs(dayjs()),
       yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
     })
@@ -63,7 +63,9 @@ export const TitleView = () => {
             setIndex(indexForContinue)
             setMode("question")
           }}
-          className="bg-green-500 text-white font-bold py-4 rounded hover:bg-green-700 text-4xl w-1/4"
+          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+            indexForContinue === 0 ? "opacity-50" : "hover:bg-green-700"
+          }`}
         >
           続きから
         </button>
