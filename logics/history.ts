@@ -2,7 +2,7 @@
 
 import { Kanji } from "@/data/kanji"
 
-const key = "kanji-study-history"
+const answerHistoryKey = "kanji-study-history"
 
 type CorrectHistory = {
   isCorrect: boolean
@@ -14,36 +14,32 @@ type KanjiCorrectHistory = {
   history: CorrectHistory[]
 }
 
+type KanjiCorrectHistories = Record<string, KanjiCorrectHistory>
+
 export const saveHistory = (kanji: Kanji, isCorrect: boolean) => {
   const histories = loadHistories()
-  const index = histories.findIndex((k) => k.kanji.kanji === kanji.kanji)
-  const history =
-    index >= 0
-      ? histories[index]
-      : {
-          kanji,
-          history: [],
-        }
-  history.history.push({ isCorrect, datetime: Date.now() })
-  if (index < 0) {
-    histories.push(history)
+  const history = histories[kanji.id] || {
+    kanji,
+    history: [],
   }
-  localStorage.setItem(key, JSON.stringify(histories))
+  history.history.push({ isCorrect, datetime: Date.now() })
+  histories[kanji.id] = history
+  localStorage.setItem(answerHistoryKey, JSON.stringify(histories))
 }
 
-let histories: KanjiCorrectHistory[] | undefined
-export const loadHistories = (): KanjiCorrectHistory[] => {
+let histories: KanjiCorrectHistories | undefined
+export const loadHistories = (): KanjiCorrectHistories => {
   if (histories) return histories
 
-  const str = localStorage.getItem(key)
-  histories = (str ? JSON.parse(str) : []) as KanjiCorrectHistory[]
+  const str = localStorage.getItem(answerHistoryKey)
+  histories = (str ? JSON.parse(str) : {}) as KanjiCorrectHistories
   return histories
 }
 
 export const getHistory = (kanji: Kanji): KanjiCorrectHistory => {
   const current = loadHistories()
   return (
-    current.find((k) => k.kanji.kanji === kanji.kanji) || {
+    current[kanji.id] || {
       kanji,
       history: [],
     }
