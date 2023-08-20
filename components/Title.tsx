@@ -94,14 +94,14 @@ export const TitleView = () => {
       <h2 className="text-center mt-16 text-4xl">復習</h2>
       <div className="flex justify-center gap-1 mt-4">
         <button
-          disabled={todayWrongs.length === 0}
+          disabled={recentWrongs.length === 0}
           onClick={() => {
             setQuestions(recentWrongs)
             setIndex(0)
             setMode("review")
           }}
           className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
-            todayWrongs.length === 0 ? "opacity-50" : "hover:bg-green-700"
+            recentWrongs.length === 0 ? "opacity-50" : "hover:bg-green-700"
           }`}
         >
           直前に間違えたところ
