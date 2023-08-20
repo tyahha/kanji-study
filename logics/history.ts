@@ -2,27 +2,19 @@
 
 import { Kanji } from "@/data/kanji"
 
-const answerHistoryKey = "kanji-study-history"
+const answerHistoryKey = "kanji-study-history-v2"
 
 type CorrectHistory = {
   isCorrect: boolean
   datetime: number
 }
 
-type KanjiCorrectHistory = {
-  kanji: Kanji
-  history: CorrectHistory[]
-}
-
-type KanjiCorrectHistories = Record<string, KanjiCorrectHistory>
+type KanjiCorrectHistories = Record<string, CorrectHistory[]>
 
 export const saveHistory = (kanji: Kanji, isCorrect: boolean) => {
   const histories = loadHistories()
-  const history = histories[kanji.id] || {
-    kanji,
-    history: [],
-  }
-  history.history.push({ isCorrect, datetime: Date.now() })
+  const history = histories[kanji.id] || []
+  history.push({ isCorrect, datetime: Date.now() })
   histories[kanji.id] = history
   localStorage.setItem(answerHistoryKey, JSON.stringify(histories))
 }
@@ -36,12 +28,7 @@ export const loadHistories = (): KanjiCorrectHistories => {
   return histories
 }
 
-export const getHistory = (kanji: Kanji): KanjiCorrectHistory => {
+export const getHistory = (kanji: Kanji): CorrectHistory[] => {
   const current = loadHistories()
-  return (
-    current[kanji.id] || {
-      kanji,
-      history: [],
-    }
-  )
+  return current[kanji.id] || []
 }

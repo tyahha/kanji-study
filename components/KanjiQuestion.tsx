@@ -1,7 +1,6 @@
 import { Kanji } from "@/data/kanji"
 import { useMemo, useState } from "react"
 import { getHistory, saveHistory } from "@/logics/history"
-import { useRouter } from "next/navigation"
 
 type Props = {
   data: Kanji
@@ -22,14 +21,13 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
       : data.kana
   }, [status, data])
 
-  const router = useRouter()
   const saveResult = (isCollect: boolean) => {
     saveHistory(data, isCollect)
     setStatus("thinking")
     onNext()
   }
 
-  const history = useMemo(() => getHistory(data), [data])
+  const history = useMemo(() => getHistory(data).sort((a, b) => b.datetime - a.datetime), [data])
 
   return (
     <main className="flex justify-center">
@@ -102,7 +100,7 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
               </tr>
             </thead>
             <tbody>
-              {history.history.map((h) => {
+              {history.map((h) => {
                 const date = new Date(h.datetime)
                 const str =
                   date.getFullYear() +
@@ -133,8 +131,8 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
                   合計
                 </th>
                 <td className="px-6 py-4">
-                  ◎：{history.history.filter((h) => h.isCorrect).length}, ✖：
-                  {history.history.filter((h) => !h.isCorrect).length}
+                  ◎：{history.filter((h) => h.isCorrect).length}, ✖：
+                  {history.filter((h) => !h.isCorrect).length}
                 </td>
               </tr>
             </tbody>
