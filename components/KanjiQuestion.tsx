@@ -10,7 +10,7 @@ type Props = {
   onReturnTitle: () => void
 }
 export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) => {
-  const [s1, s2] = data.sentence.split("*")
+  const [s1, s2] = data.sentence.split(data.kanji)
   const [status, setStatus] = useState<"thinking" | "result">("thinking")
   const word = useMemo(() => {
     return status === "thinking"
