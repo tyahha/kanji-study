@@ -13,12 +13,16 @@ type CorrectHistory = {
 type KanjiCorrectHistories = Record<string, CorrectHistory[]>
 
 export const saveHistory = (kanji: Kanji, isCorrect: boolean) => {
+  saveHistoryAtReview(kanji, isCorrect)
+  localStorage.setItem(lastAnswerKey, kanji.id)
+}
+
+export const saveHistoryAtReview = (kanji: Kanji, isCorrect: boolean) => {
   const histories = loadHistories()
   const history = histories[kanji.id] || []
   history.push({ isCorrect, datetime: Date.now() })
   histories[kanji.id] = history
   localStorage.setItem(answerHistoryKey, JSON.stringify(histories))
-  localStorage.setItem(lastAnswerKey, kanji.id)
 }
 
 let histories: KanjiCorrectHistories | undefined

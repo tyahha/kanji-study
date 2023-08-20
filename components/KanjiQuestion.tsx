@@ -1,6 +1,6 @@
 import { Kanji } from "@/data/kanji"
 import { useMemo, useState } from "react"
-import { getHistory, saveHistory } from "@/logics/history"
+import { getHistory, saveHistory, saveHistoryAtReview } from "@/logics/history"
 import dayjs from "dayjs"
 import { useAppContext } from "@/context"
 
@@ -11,6 +11,8 @@ type Props = {
   onReturnTitle: () => void
 }
 export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) => {
+  const { mode } = useAppContext()
+
   const [s1, s2] = data.sentence.split(data.kanji)
   const [status, setStatus] = useState<"thinking" | "result">("thinking")
   const word = useMemo(() => {
@@ -24,7 +26,11 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
   }, [status, data])
 
   const saveResult = (isCollect: boolean) => {
-    saveHistory(data, isCollect)
+    if (mode === "review") {
+      saveHistoryAtReview(data, isCollect)
+    } else {
+      saveHistory(data, isCollect)
+    }
     setStatus("thinking")
     onNext()
   }

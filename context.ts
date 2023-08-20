@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react"
 import { Kanji } from "@/data/kanji"
 
-type Mode = "title" | "question"
+type Mode = "title" | "question" | "review"
 
 export const AppContext = createContext<{
   index: number
