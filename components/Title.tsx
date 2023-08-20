@@ -1,6 +1,6 @@
 import { useAppContext } from "@/context"
 import { Kanji, KanjiData } from "@/data/kanji"
-import { useMemo } from "react"
+import { useEffect, useState } from "react"
 import { loadHistories, loadLastAnsweredId } from "@/logics/history"
 import dayjs from "dayjs"
 
@@ -22,15 +22,25 @@ const pickWrongs = (day: dayjs.Dayjs) => {
 
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
-  const indexForContinue = useMemo(() => {
+  const [{ indexForContinue, todayWrongs, yesterdayWrongs }, setState] = useState<{
+    indexForContinue: number
+    todayWrongs: Kanji[]
+    yesterdayWrongs: Kanji[]
+  }>({
+    indexForContinue: 0,
+    todayWrongs: [],
+    yesterdayWrongs: [],
+  })
+  useEffect(() => {
     const id = loadLastAnsweredId() || KanjiData[0].id
     const index = KanjiData.findIndex((k) => k.id === id) || 0
     const continueIndex = index + 1
-    return continueIndex >= KanjiData.length ? 0 : continueIndex
+    setState({
+      indexForContinue: KanjiData.length ? 0 : continueIndex,
+      todayWrongs: pickWrongs(dayjs()),
+      yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
+    })
   }, [])
-
-  const todayWrongs = useMemo(() => pickWrongs(dayjs()), [])
-  const yesterdayWrongs = useMemo(() => pickWrongs(dayjs().subtract(1, "day")), [])
 
   return (
     <main className="mt-16">
