@@ -1,17 +1,14 @@
-import { Kanji } from "@/data/kanji"
-import { useState } from "react"
 import { KanjiQuestion } from "@/components/KanjiQuestion"
+import { useAppContext } from "@/context"
 
-type Props = {
-  questions: Kanji[]
-  onReturnTitle: () => void
-}
-export const QuestionView = ({ questions, onReturnTitle }: Props) => {
-  const [index, setIndex] = useState(0)
+export const QuestionView = () => {
+  const { index, setMode, setIndex, questions } = useAppContext()
+  const returnTitle = () => setMode("title")
+
   const goToNext = () => {
     const nextIndex = index + 1
     if (nextIndex >= questions.length) {
-      onReturnTitle()
+      returnTitle()
     } else {
       setIndex(nextIndex)
     }
@@ -19,7 +16,7 @@ export const QuestionView = ({ questions, onReturnTitle }: Props) => {
   const goToPrev = () => {
     const nextIndex = index - 1
     if (nextIndex < 0) {
-      onReturnTitle()
+      returnTitle()
     } else {
       setIndex(nextIndex)
     }
@@ -30,7 +27,7 @@ export const QuestionView = ({ questions, onReturnTitle }: Props) => {
       data={questions[index]}
       onPrev={goToPrev}
       onNext={goToNext}
-      onReturnTitle={onReturnTitle}
+      onReturnTitle={returnTitle}
     />
   )
 }

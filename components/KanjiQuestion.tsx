@@ -25,6 +25,7 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
   const router = useRouter()
   const saveResult = (isCollect: boolean) => {
     saveHistory(data, isCollect)
+    setStatus("thinking")
     onNext()
   }
 

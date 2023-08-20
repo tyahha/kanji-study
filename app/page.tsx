@@ -3,17 +3,26 @@
 import { TitleView } from "@/components/Title"
 import { useState } from "react"
 import { QuestionView } from "@/components/QuestionView"
-import { KanjiData } from "@/data/kanji"
+import { Kanji } from "@/data/kanji"
+import { AppContext } from "@/context"
 
 export default function Home() {
   const [mode, setMode] = useState<"title" | "question">("title")
+  const [index, setIndex] = useState(0)
+  const [questions, setQuestions] = useState<Kanji[]>([])
 
-  return mode === "title" ? (
-    <TitleView
-      onStartFromBeginning={() => setMode("question")}
-      onStartFromContinue={() => setMode("question")}
-    />
-  ) : (
-    <QuestionView questions={KanjiData} onReturnTitle={() => setMode("title")} />
+  return (
+    <AppContext.Provider
+      value={{
+        index,
+        setIndex,
+        questions,
+        setQuestions,
+        mode,
+        setMode,
+      }}
+    >
+      {mode === "title" ? <TitleView /> : <QuestionView />}
+    </AppContext.Provider>
   )
 }
