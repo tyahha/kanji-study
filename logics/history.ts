@@ -3,6 +3,7 @@
 import { Kanji } from "@/data/kanji"
 
 const answerHistoryKey = "kanji-study-history-v2"
+const lastAnswerKey = "kanji-study-last-answer"
 
 type CorrectHistory = {
   isCorrect: boolean
@@ -17,6 +18,7 @@ export const saveHistory = (kanji: Kanji, isCorrect: boolean) => {
   history.push({ isCorrect, datetime: Date.now() })
   histories[kanji.id] = history
   localStorage.setItem(answerHistoryKey, JSON.stringify(histories))
+  localStorage.setItem(lastAnswerKey, kanji.id)
 }
 
 let histories: KanjiCorrectHistories | undefined
@@ -31,4 +33,8 @@ export const loadHistories = (): KanjiCorrectHistories => {
 export const getHistory = (kanji: Kanji): CorrectHistory[] => {
   const current = loadHistories()
   return current[kanji.id] || []
+}
+
+export const loadLastAnsweredId = (): string | null => {
+  return localStorage.getItem(lastAnswerKey)
 }
