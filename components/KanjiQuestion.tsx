@@ -51,32 +51,35 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
           <span className="text-6xl"> {s2}</span>
         </p>
         <div className="mt-4">
-          {status === "thinking" ? (
+          <button
+            className={`bg-blue-500 text-white font-bold py-4 rounded text-4xl w-1/2 ${
+              status === "thinking" ? "hover:bg-blue-700" : "opacity-50"
+            }`}
+            onClick={() => setStatus("result")}
+            disabled={status !== "thinking"}
+          >
+            答えを見る
+          </button>
+          <div className="flex gap-4 justify-center mt-4">
             <button
-              className={`bg-blue-500 text-white font-bold py-4 rounded hover:bg-blue-700 text-4xl w-1/2`}
-              onClick={() => setStatus("result")}
-              disabled={status !== "thinking"}
+              disabled={status !== "result"}
+              className={`bg-green-500 text-white font-bold py-4 w-1/2 text-4xl rounded ${
+                status === "result" ? "hover:bg-green-700" : "opacity-50"
+              }`}
+              onClick={() => saveResult(true)}
             >
-              答えを見る
+              ◎あたった
             </button>
-          ) : (
-            <div className="flex gap-4 justify-center">
-              <button
-                disabled={status !== "result"}
-                className={`bg-green-500 hover:bg-green-700 text-white font-bold py-6 w-1/2 text-4xl rounded`}
-                onClick={() => saveResult(true)}
-              >
-                ◎あたった
-              </button>
-              <button
-                disabled={status !== "result"}
-                className={`bg-red-500 hover:bg-red-700 text-white font-bold py-6 w-1/2 text-4xl rounded'`}
-                onClick={() => saveResult(false)}
-              >
-                ✖はずれた
-              </button>
-            </div>
-          )}
+            <button
+              disabled={status !== "result"}
+              className={`bg-red-500 text-white font-bold py-4 w-1/2 text-4xl rounded ${
+                status === "result" ? "hover:bg-red-700" : "opacity-50"
+              }`}
+              onClick={() => saveResult(false)}
+            >
+              ✖はずれた
+            </button>
+          </div>
         </div>
         <div className="mt-4"></div>
         <div className="mt-4 flex gap-8 justify-center">
