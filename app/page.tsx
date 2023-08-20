@@ -5,6 +5,9 @@ import { useState } from "react"
 import { QuestionView } from "@/components/QuestionView"
 import { Kanji } from "@/data/kanji"
 import { AppContext } from "@/context"
+import dayjs from "dayjs"
+import "dayjs/locale/ja"
+dayjs.locale("ja")
 
 export default function Home() {
   const [mode, setMode] = useState<"title" | "question">("title")

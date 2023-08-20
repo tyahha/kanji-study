@@ -1,6 +1,7 @@
 import { Kanji } from "@/data/kanji"
 import { useMemo, useState } from "react"
 import { getHistory, saveHistory } from "@/logics/history"
+import dayjs from "dayjs"
 
 type Props = {
   data: Kanji
@@ -107,13 +108,6 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
             </thead>
             <tbody>
               {history.map((h) => {
-                const date = new Date(h.datetime)
-                const str =
-                  date.getFullYear() +
-                  "/" +
-                  ("0" + (date.getMonth() + 1)).slice(-2) +
-                  "/" +
-                  ("0" + date.getDate()).slice(-2)
                 return (
                   <tr
                     key={h.datetime}
@@ -123,7 +117,7 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {str}
+                      {dayjs(h.datetime).format("YYYY/MM/DD(ddd)")}
                     </th>
                     <td className="px-6 py-4">{h.isCorrect ? "◎" : "✖"}</td>
                   </tr>
