@@ -2,6 +2,7 @@ import { Kanji } from "@/data/kanji"
 import { useMemo, useState } from "react"
 import { getHistory, saveHistory } from "@/logics/history"
 import dayjs from "dayjs"
+import { useAppContext } from "@/context"
 
 type Props = {
   data: Kanji
@@ -29,11 +30,15 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
   }
 
   const history = useMemo(() => getHistory(data).sort((a, b) => b.datetime - a.datetime), [data])
+  const { questions } = useAppContext()
+  const index = useMemo(() => questions.findIndex((q) => q.id === data.id), [data, questions])
 
   return (
     <main className="flex justify-center">
       <section className="w-11/12 text-center">
-        <h2 className="text-left text-4xl">問題：</h2>
+        <h2 className="text-center text-6xl my-4">
+          問題{data.id}({index + 1}/{questions.length})
+        </h2>
         <p className="bg-white text-center py-16">
           <span className="text-6xl">{s1} </span>
           <span className="font-bold underline text-6xl">{word}</span>
