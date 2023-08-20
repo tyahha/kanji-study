@@ -70,7 +70,10 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
         <div className="mt-4 flex gap-8 justify-center">
           <button
             className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-            onClick={onPrev}
+            onClick={() => {
+              setStatus("thinking")
+              onPrev()
+            }}
           >
             ＜＜＜前に戻る
           </button>
@@ -82,7 +85,10 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
           </button>
           <button
             className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-            onClick={onNext}
+            onClick={() => {
+              setStatus("thinking")
+              onNext()
+            }}
           >
             次に進む＞＞＞
           </button>
