@@ -29,8 +29,8 @@ const pickRecentWrongs = (day: dayjs.Dayjs) => {
     if (
       kanji &&
       history.length > 0 &&
-      !history[0].isCorrect &&
-      baseDay === dayjs(history[0].datetime).format("YYYYMMDD")
+      !history[history.length - 1].isCorrect &&
+      baseDay === dayjs(history[history.length - 1].datetime).format("YYYYMMDD")
     ) {
       ret.push(kanji)
     }
