@@ -44,6 +44,32 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
   const { questions } = useAppContext()
   const index = useMemo(() => questions.findIndex((q) => q.id === data.id), [data, questions])
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        if (status === "thinking") {
+          if (e.shiftKey) {
+            onPrev()
+          } else {
+            setStatus("result")
+          }
+        } else {
+          if (e.shiftKey) {
+            setStatus("thinking")
+          } else {
+            setStatus("thinking")
+            onNext()
+          }
+        }
+      }
+    }
+    window.addEventListener("keydown", handler)
+
+    return () => {
+      window.removeEventListener("keydown", handler)
+    }
+  }, [status, onPrev, onNext])
+
   return (
     <main className="flex justify-center">
       <section className="w-11/12 text-center">
