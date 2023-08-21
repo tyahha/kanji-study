@@ -71,26 +71,22 @@ export const DrawArea = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <canvas ref={canvasRef} />
-      <button
-        className="absolute top-2 right-28 px-2 py-1 rounded bg-gray-300 text-red-700 text-4xl"
-        onClick={undo}
-      >
-        ←
-      </button>
-      <button
-        className="absolute top-2 right-14 px-2 py-1 rounded bg-gray-300 text-red-700 text-4xl"
-        onClick={redo}
-      >
-        →
-      </button>
-      <button
-        className="absolute top-2 right-2 px-2 py-1 rounded bg-gray-300 text-red-700 text-4xl"
-        onClick={clearCanvas}
-      >
-        ✖
-      </button>
+      <div className="flex gap-2 absolute top-2 right-2">
+        <button className="px-2 py-1 rounded bg-gray-300 text-red-700 text-4xl" onClick={undo}>
+          ←
+        </button>
+        <button className="px-2 py-1 rounded bg-gray-300 text-red-700 text-4xl" onClick={redo}>
+          →
+        </button>
+        <button
+          className="px-2 py-1 rounded bg-gray-300 text-red-700 text-4xl"
+          onClick={clearCanvas}
+        >
+          ✖
+        </button>
+      </div>
     </div>
   )
 }
