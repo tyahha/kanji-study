@@ -3,6 +3,7 @@ import { useMemo, useState } from "react"
 import { saveHistory, saveHistoryAtReview } from "@/logics/history"
 import { useAppContext } from "@/context"
 import { Histories } from "@/components/Histories"
+import { DrawArea } from "@/components/DrawArea"
 
 type Props = {
   data: Kanji
@@ -49,6 +50,9 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
           <span className="font-bold underline text-6xl">{word}</span>
           <span className="text-6xl"> {s2}</span>
         </p>
+        <div className="flex justify-center mt-4 bg-white">
+          <DrawArea />
+        </div>
         <div className="mt-4">
           <button
             className={`bg-blue-500 text-white font-bold py-4 rounded text-4xl w-1/2 ${
