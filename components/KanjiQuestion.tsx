@@ -73,50 +73,6 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
   return (
     <main className="flex justify-center">
       <section className="w-11/12 text-center">
-        <h2 className="text-center text-6xl my-4">
-          問題{data.id}({index + 1}/{questions.length})
-        </h2>
-        <p className="text-xl text-center">今日勉強した漢字数：{todayStudyCount}</p>
-        <p className="bg-gray-100 text-center py-16 my-4">
-          <span className="text-6xl">{s1} </span>
-          <span className="font-bold underline text-6xl underline-offset-[8px]">{word}</span>
-          <span className="text-6xl"> {s2}</span>
-        </p>
-        <div className="flex justify-center mt-4 bg-white">
-          <DrawArea />
-        </div>
-        <div className="mt-4">
-          <button
-            className={`bg-blue-500 text-white font-bold py-4 rounded text-4xl w-1/2 ${
-              status === "thinking" ? "hover:bg-blue-700" : "opacity-50"
-            }`}
-            onClick={() => setStatus("result")}
-            disabled={status !== "thinking"}
-          >
-            答えを見る
-          </button>
-          <div className="flex gap-4 justify-center mt-4">
-            <button
-              disabled={status !== "result"}
-              className={`bg-green-500 text-white font-bold py-4 w-1/2 text-4xl rounded ${
-                status === "result" ? "hover:bg-green-700" : "opacity-50"
-              }`}
-              onClick={() => saveResult(true)}
-            >
-              ◎あたった
-            </button>
-            <button
-              disabled={status !== "result"}
-              className={`bg-red-500 text-white font-bold py-4 w-1/2 text-4xl rounded ${
-                status === "result" ? "hover:bg-red-700" : "opacity-50"
-              }`}
-              onClick={() => saveResult(false)}
-            >
-              ✖はずれた
-            </button>
-          </div>
-        </div>
-        <div className="mt-4"></div>
         <div className="mt-4 flex gap-8 justify-center">
           <button
             className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -142,6 +98,49 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
           >
             次に進む＞＞＞
           </button>
+        </div>
+        <p className="text-xl text-center mt-4">今日勉強した漢字数：{todayStudyCount}</p>
+        <h2 className="text-center text-6xl my-4">
+          問題{data.id}({index + 1}/{questions.length})
+        </h2>
+        <div className="mt-4">
+          <div className="flex gap-4 justify-center mt-4">
+            <button
+              disabled={status !== "result"}
+              className={`bg-green-500 text-white font-bold py-4 w-1/2 text-4xl rounded ${
+                status === "result" ? "hover:bg-green-700" : "opacity-50"
+              }`}
+              onClick={() => saveResult(true)}
+            >
+              ◎あたった
+            </button>
+            <button
+              disabled={status !== "result"}
+              className={`bg-red-500 text-white font-bold py-4 w-1/2 text-4xl rounded ${
+                status === "result" ? "hover:bg-red-700" : "opacity-50"
+              }`}
+              onClick={() => saveResult(false)}
+            >
+              ✖はずれた
+            </button>
+          </div>
+          <button
+            className={`bg-blue-500 text-white font-bold py-4 rounded text-4xl w-1/2 mt-4 ${
+              status === "thinking" ? "hover:bg-blue-700" : "opacity-50"
+            }`}
+            onClick={() => setStatus("result")}
+            disabled={status !== "thinking"}
+          >
+            答えを見る
+          </button>
+        </div>
+        <p className="bg-gray-100 text-center py-16 my-4">
+          <span className="text-6xl">{s1} </span>
+          <span className="font-bold underline text-6xl underline-offset-[8px]">{word}</span>
+          <span className="text-6xl"> {s2}</span>
+        </p>
+        <div className="flex justify-center mt-4 bg-white">
+          <DrawArea />
         </div>
         <div className="relative overflow-x-auto shadow-md mt-8 w-fit m-auto min-w-8">
           <Histories kanji={data} />
