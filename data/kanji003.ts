@@ -1,6 +1,9 @@
 import { Kanji } from "@/data/kanji"
 
-export const KanjiData3Title = "植物のなかま"
+export const KanjiData3Category = {
+  idPrefix: "3",
+  title: "植物のなかま",
+}
 
 export const KanjiData3: Kanji[] = [
   {

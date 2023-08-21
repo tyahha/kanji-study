@@ -1,5 +1,5 @@
 import { useAppContext } from "@/context"
-import { Kanji, KanjiData, KanjiDataTitles } from "@/data/kanji"
+import { Kanji, KanjiData, KanjiDataCategories } from "@/data/kanji"
 import { useEffect, useState } from "react"
 import { loadHistories, loadLastAnsweredId } from "@/logics/history"
 import dayjs from "dayjs"
@@ -62,7 +62,7 @@ export const TitleView = () => {
       yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
     })
   }, [])
-  const [titleIndex, setTitleIndex] = useState(0)
+  const [categoryIndex, setCategoryIndex] = useState(0)
 
   return (
     <main className="mt-16">
@@ -95,7 +95,8 @@ export const TitleView = () => {
       <div className="flex justify-center gap-1 mt-4">
         <button
           onClick={() => {
-            const idToFind = `${titleIndex + 1}-1`
+            const category = KanjiDataCategories[categoryIndex]
+            const idToFind = `${category.idPrefix}-1`
             const index = KanjiData.findIndex((k) => k.id === idToFind)
             setQuestions(KanjiData)
             setIndex(index < 0 ? 0 : index)
@@ -109,12 +110,12 @@ export const TitleView = () => {
         </button>
         <select
           className="text-3xl text-center w-1/4"
-          value={titleIndex}
-          onChange={(e) => setTitleIndex(Number(e.target.value))}
+          value={categoryIndex}
+          onChange={(e) => setCategoryIndex(Number(e.target.value))}
         >
-          {KanjiDataTitles.map((t, index) => (
-            <option key={t} value={index}>
-              {index + 1}. {t}
+          {KanjiDataCategories.map((c, index) => (
+            <option key={c.idPrefix} value={index}>
+              {c.idPrefix}. {c.title}
             </option>
           ))}
         </select>
