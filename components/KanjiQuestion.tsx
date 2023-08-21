@@ -1,6 +1,6 @@
 import { Kanji } from "@/data/kanji"
-import { useMemo, useState } from "react"
-import { saveHistory, saveHistoryAtReview } from "@/logics/history"
+import { useEffect, useMemo, useState } from "react"
+import { getTodayStudyCount, saveHistory, saveHistoryAtReview } from "@/logics/history"
 import { useAppContext } from "@/context"
 import { Histories } from "@/components/Histories"
 import { DrawArea } from "@/components/DrawArea"
@@ -26,6 +26,11 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
       : data.kana
   }, [status, data])
 
+  const [todayStudyCount, setTodayStudyCount] = useState(getTodayStudyCount())
+  useEffect(() => {
+    setTodayStudyCount(getTodayStudyCount())
+  }, [data])
+
   const saveResult = (isCollect: boolean) => {
     if (mode === "review") {
       saveHistoryAtReview(data, isCollect)
@@ -45,7 +50,8 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
         <h2 className="text-center text-6xl my-4">
           問題{data.id}({index + 1}/{questions.length})
         </h2>
-        <p className="bg-gray-100 text-center py-16">
+        <p className="text-xl text-center">今日勉強した漢字数：{todayStudyCount}</p>
+        <p className="bg-gray-100 text-center py-16 my-4">
           <span className="text-6xl">{s1} </span>
           <span className="font-bold underline text-6xl underline-offset-[8px]">{word}</span>
           <span className="text-6xl"> {s2}</span>

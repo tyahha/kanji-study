@@ -1,7 +1,7 @@
 import { useAppContext } from "@/context"
 import { Kanji, KanjiData, KanjiDataCategories } from "@/data/kanji"
 import { useEffect, useState } from "react"
-import { loadHistories, loadLastAnsweredId } from "@/logics/history"
+import { getTodayStudyCount, loadHistories, loadLastAnsweredId } from "@/logics/history"
 import dayjs from "dayjs"
 
 const pickWrongs = (day: dayjs.Dayjs) => {
@@ -41,7 +41,14 @@ const pickRecentWrongs = (day: dayjs.Dayjs) => {
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
   const [
-    { indexForContinue, recentWrongs, todayWrongs, yesterdayWrongs, twoDaysAgoWrongs },
+    {
+      indexForContinue,
+      recentWrongs,
+      todayWrongs,
+      yesterdayWrongs,
+      twoDaysAgoWrongs,
+      todayStudyCount,
+    },
     setState,
   ] = useState<{
     indexForContinue: number
@@ -49,12 +56,14 @@ export const TitleView = () => {
     todayWrongs: Kanji[]
     yesterdayWrongs: Kanji[]
     twoDaysAgoWrongs: Kanji[]
+    todayStudyCount: number
   }>({
     indexForContinue: 0,
     recentWrongs: [],
     todayWrongs: [],
     yesterdayWrongs: [],
     twoDaysAgoWrongs: [],
+    todayStudyCount: 0,
   })
   useEffect(() => {
     const id = loadLastAnsweredId() || KanjiData[0].id
@@ -66,6 +75,7 @@ export const TitleView = () => {
       todayWrongs: pickWrongs(dayjs()),
       yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
       twoDaysAgoWrongs: pickWrongs(dayjs().subtract(2, "day")),
+      todayStudyCount: getTodayStudyCount(),
     })
   }, [])
   const [categoryIndex, setCategoryIndex] = useState(0)
@@ -73,7 +83,9 @@ export const TitleView = () => {
   return (
     <main className="mt-16">
       <h1 className="text-9xl text-center">漢字の勉強</h1>
-      <h2 className="text-center mt-12 text-4xl">毎日の学習</h2>
+      <h2 className="text-center mt-12 text-4xl">
+        毎日の学習(本日勉強した漢字の数：{todayStudyCount})
+      </h2>
       <div className="flex justify-center gap-1 mt-4">
         <button
           onClick={() => {

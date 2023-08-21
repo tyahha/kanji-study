@@ -1,6 +1,7 @@
 "use client"
 
 import { Kanji } from "@/data/kanji"
+import dayjs from "dayjs"
 
 const answerHistoryKey = "kanji-study-history-v2"
 const lastAnswerKey = "kanji-study-last-answer"
@@ -41,4 +42,11 @@ export const getHistory = (kanji: Kanji): CorrectHistory[] => {
 
 export const loadLastAnsweredId = (): string | null => {
   return localStorage.getItem(lastAnswerKey)
+}
+
+export const getTodayStudyCount = (): number => {
+  const today = dayjs().format("YYYYMMDD")
+  return Object.values(loadHistories()).reduce((p, h) => {
+    return p + (h.find((h) => dayjs(h.datetime).format("YYYYMMDD") === today) ? 1 : 0)
+  }, 0)
 }
