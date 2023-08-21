@@ -4,6 +4,7 @@ import { KanjiData3, KanjiData3Category } from "@/data/kanji003"
 import { KanjiData4, KanjiData4Category } from "@/data/kanji004"
 import { KanjiDataB1_2, KanjiDataB1_2Category } from "@/data/kanjiB001-2"
 import { KanjiDataB1_1, KanjiDataB1_1Category } from "@/data/kanjiB001-1"
+import { KanjiData5, KanjiData5Category } from "@/data/kanji005"
 
 type QuestionType = "read" | "write"
 
@@ -22,6 +23,7 @@ export const KanjiDataCategories = [
   KanjiData4Category,
   KanjiDataB1_1Category,
   KanjiDataB1_2Category,
+  KanjiData5Category,
 ]
 
 export const KanjiData: Kanji[] = [
@@ -31,4 +33,5 @@ export const KanjiData: Kanji[] = [
   ...KanjiData4,
   ...KanjiDataB1_1,
   ...KanjiDataB1_2,
+  ...KanjiData5,
 ]
