@@ -1,11 +1,13 @@
 import { KanjiQuestion } from "@/components/KanjiQuestion"
 import { useAppContext } from "@/context"
+import { getCanvas } from "@/logics/canvas"
 
 export const QuestionView = () => {
   const { index, setMode, setIndex, questions } = useAppContext()
   const returnTitle = () => setMode("title")
 
   const goToNext = () => {
+    getCanvas()?.clear()
     const nextIndex = index + 1
     if (nextIndex >= questions.length) {
       returnTitle()
@@ -14,6 +16,7 @@ export const QuestionView = () => {
     }
   }
   const goToPrev = () => {
+    getCanvas()?.clear()
     const nextIndex = index - 1
     if (nextIndex < 0) {
       returnTitle()

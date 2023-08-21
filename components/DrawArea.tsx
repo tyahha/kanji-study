@@ -1,31 +1,30 @@
 import { useEffect, useRef } from "react"
 import { Canvas, PencilBrush } from "fabric"
+import { getCanvas, setCanvas } from "@/logics/canvas"
 
 export const DrawArea = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const canvas = useRef<Canvas | null>(null)
-
   useEffect(() => {
     if (!canvasRef.current) return
 
-    canvas.current = new Canvas(canvasRef.current, {
+    const canvas = new Canvas(canvasRef.current, {
       isDrawingMode: true,
       width: window.innerWidth - 176,
       height: 200,
     })
-    const brash = new PencilBrush(canvas.current)
+    const brash = new PencilBrush(canvas)
     brash.width = 3
     brash.color = "#666"
-    canvas.current.freeDrawingBrush = brash
+    canvas.freeDrawingBrush = brash
+    setCanvas(canvas)
     return () => {
-      if (!canvas.current) return
-      canvas.current.dispose()
-      canvas.current = null
+      canvas.dispose()
+      setCanvas(null)
     }
   }, [])
 
   const clearCanvas = () => {
-    canvas.current?.clear()
+    getCanvas()?.clear()
   }
 
   return (
