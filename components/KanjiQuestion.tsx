@@ -45,7 +45,7 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
         <h2 className="text-center text-6xl my-4">
           問題{data.id}({index + 1}/{questions.length})
         </h2>
-        <p className="bg-white text-center py-16">
+        <p className="bg-gray-100 text-center py-16">
           <span className="text-6xl">{s1} </span>
           <span className="font-bold underline text-6xl">{word}</span>
           <span className="text-6xl"> {s2}</span>
