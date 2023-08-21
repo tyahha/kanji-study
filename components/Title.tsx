@@ -40,16 +40,21 @@ const pickRecentWrongs = (day: dayjs.Dayjs) => {
 
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
-  const [{ indexForContinue, recentWrongs, todayWrongs, yesterdayWrongs }, setState] = useState<{
+  const [
+    { indexForContinue, recentWrongs, todayWrongs, yesterdayWrongs, twoDaysAgoWrongs },
+    setState,
+  ] = useState<{
     indexForContinue: number
     recentWrongs: Kanji[]
     todayWrongs: Kanji[]
     yesterdayWrongs: Kanji[]
+    twoDaysAgoWrongs: Kanji[]
   }>({
     indexForContinue: 0,
     recentWrongs: [],
     todayWrongs: [],
     yesterdayWrongs: [],
+    twoDaysAgoWrongs: [],
   })
   useEffect(() => {
     const id = loadLastAnsweredId() || KanjiData[0].id
@@ -60,6 +65,7 @@ export const TitleView = () => {
       recentWrongs: pickRecentWrongs(dayjs()),
       todayWrongs: pickWrongs(dayjs()),
       yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
+      twoDaysAgoWrongs: pickWrongs(dayjs().subtract(2, "day")),
     })
   }, [])
   const [categoryIndex, setCategoryIndex] = useState(0)
@@ -67,7 +73,7 @@ export const TitleView = () => {
   return (
     <main className="mt-16">
       <h1 className="text-9xl text-center">漢字の勉強</h1>
-      <h2 className="text-center mt-16 text-4xl">毎日の学習</h2>
+      <h2 className="text-center mt-12 text-4xl">毎日の学習</h2>
       <div className="flex justify-center gap-1 mt-4">
         <button
           onClick={() => {
@@ -75,7 +81,7 @@ export const TitleView = () => {
             setIndex(0)
             setMode("question")
           }}
-          className="bg-blue-500 text-white font-bold py-4 rounded hover:bg-blue-700 text-4xl w-1/4"
+          className="bg-blue-500 text-white font-bold py-4 rounded hover:bg-blue-700 text-2xl w-1/4"
         >
           初めから
         </button>
@@ -85,7 +91,7 @@ export const TitleView = () => {
             setIndex(indexForContinue)
             setMode("question")
           }}
-          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
             indexForContinue === 0 ? "opacity-50" : "hover:bg-green-700"
           }`}
         >
@@ -102,14 +108,14 @@ export const TitleView = () => {
             setIndex(index < 0 ? 0 : index)
             setMode("question")
           }}
-          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
             indexForContinue === 0 ? "opacity-50" : "hover:bg-green-700"
           }`}
         >
           選んで始める
         </button>
         <select
-          className="text-3xl text-center w-1/4"
+          className="text-xl text-center w-1/4"
           value={categoryIndex}
           onChange={(e) => setCategoryIndex(Number(e.target.value))}
         >
@@ -120,7 +126,7 @@ export const TitleView = () => {
           ))}
         </select>
       </div>
-      <h2 className="text-center mt-16 text-4xl">復習</h2>
+      <h2 className="text-center mt-12 text-4xl">復習</h2>
       <div className="flex justify-center gap-1 mt-4">
         <button
           disabled={recentWrongs.length === 0}
@@ -129,14 +135,12 @@ export const TitleView = () => {
             setIndex(0)
             setMode("review")
           }}
-          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
             recentWrongs.length === 0 ? "opacity-50" : "hover:bg-green-700"
           }`}
         >
           直前に間違えたところ
         </button>
-      </div>
-      <div className="flex justify-center gap-1 mt-4">
         <button
           disabled={todayWrongs.length === 0}
           onClick={() => {
@@ -144,7 +148,7 @@ export const TitleView = () => {
             setIndex(0)
             setMode("review")
           }}
-          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
             todayWrongs.length === 0 ? "opacity-50" : "hover:bg-green-700"
           }`}
         >
@@ -159,11 +163,24 @@ export const TitleView = () => {
             setIndex(0)
             setMode("review")
           }}
-          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
             yesterdayWrongs.length === 0 ? "opacity-50" : "hover:bg-green-700"
           }`}
         >
           昨日間違えたところ
+        </button>
+        <button
+          disabled={twoDaysAgoWrongs.length === 0}
+          onClick={() => {
+            setQuestions(twoDaysAgoWrongs)
+            setIndex(0)
+            setMode("review")
+          }}
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
+            twoDaysAgoWrongs.length === 0 ? "opacity-50" : "hover:bg-green-700"
+          }`}
+        >
+          一昨日間違えたところ
         </button>
       </div>
     </main>
