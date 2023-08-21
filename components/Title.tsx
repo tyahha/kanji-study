@@ -67,8 +67,9 @@ export const TitleView = () => {
   })
   useEffect(() => {
     const id = loadLastAnsweredId() || KanjiData[0].id
-    const index = KanjiData.findIndex((k) => k.id === id) || -1
-    const continueIndex = index + 1
+    const foundIndex = KanjiData.findIndex((k) => k.id === id)
+    const continueIndex = foundIndex == null ? 0 : foundIndex + 1
+    console.log("continueIndex", continueIndex)
     setState({
       indexForContinue: KanjiData.length <= continueIndex ? 0 : continueIndex,
       recentWrongs: pickRecentWrongs(dayjs()),
