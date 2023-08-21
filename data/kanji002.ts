@@ -1,5 +1,7 @@
 import { Kanji } from "@/data/kanji"
 
+export const KanjiData2Title = "水と火の力"
+
 export const KanjiData2: Kanji[] = [
   {
     id: "2-1",

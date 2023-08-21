@@ -1,5 +1,5 @@
 import { useAppContext } from "@/context"
-import { Kanji, KanjiData } from "@/data/kanji"
+import { Kanji, KanjiData, KanjiDataTitles } from "@/data/kanji"
 import { useEffect, useState } from "react"
 import { loadHistories, loadLastAnsweredId } from "@/logics/history"
 import dayjs from "dayjs"
@@ -62,6 +62,7 @@ export const TitleView = () => {
       yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
     })
   }, [])
+  const [titleIndex, setTitleIndex] = useState(0)
 
   return (
     <main className="mt-16">
@@ -90,6 +91,33 @@ export const TitleView = () => {
         >
           続きから
         </button>
+      </div>
+      <div className="flex justify-center gap-1 mt-4">
+        <button
+          onClick={() => {
+            const idToFind = `${titleIndex + 1}-1`
+            const index = KanjiData.findIndex((k) => k.id === idToFind)
+            setQuestions(KanjiData)
+            setIndex(index < 0 ? 0 : index)
+            setMode("question")
+          }}
+          className={`bg-green-500 text-white font-bold py-4 rounded text-4xl w-1/4 ${
+            indexForContinue === 0 ? "opacity-50" : "hover:bg-green-700"
+          }`}
+        >
+          選んで始める
+        </button>
+        <select
+          className="text-3xl text-center w-1/4"
+          value={titleIndex}
+          onChange={(e) => setTitleIndex(Number(e.target.value))}
+        >
+          {KanjiDataTitles.map((t, index) => (
+            <option key={t} value={index}>
+              {index + 1}. {t}
+            </option>
+          ))}
+        </select>
       </div>
       <h2 className="text-center mt-16 text-4xl">復習</h2>
       <div className="flex justify-center gap-1 mt-4">
