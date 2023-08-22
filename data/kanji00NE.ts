@@ -1,8 +1,8 @@
 import { Kanji } from "@/data/kanji"
 
-export const KanjiDataNCategory = {
-  idPrefix: "N",
+export const KanjiDataCATEGORY_IDCategory = {
+  idPrefix: "CATEGORY_ID",
   title: "",
 }
 
-export const KanjiDataN: Kanji[] = []
+export const KanjiDataCATEGORY_ID: Kanji[] = []
