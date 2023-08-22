@@ -27,7 +27,7 @@ export const KanjiData7: Kanji[] = [
     kana: "エンブン",
     questionType: "write",
   },
-  { id: "7-4", sentence: "肉に塩分をふる。", kanji: "塩分", kana: "しお", questionType: "write" },
+  { id: "7-4", sentence: "肉に塩分をふる。", kanji: "塩", kana: "しお", questionType: "write" },
   {
     id: "7-5",
     sentence: "砂糖の量を減らす。",
