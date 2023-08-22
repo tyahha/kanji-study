@@ -1,4 +1,4 @@
-import { Kanji } from "@/data/kanji"
+import { Kanji, KanjiDataCategories } from "@/data/kanji"
 import { useEffect, useMemo, useState } from "react"
 import { getTodayStudyCount, saveHistory, saveHistoryAtReview } from "@/logics/history"
 import { useAppContext } from "@/context"
@@ -70,8 +70,19 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
     }
   }, [status, onPrev, onNext])
 
+  const idPrefix = useMemo(() => {
+    return data.id.split("-")[0]
+  }, [data])
+
+  const [category, categoryIndex] = useMemo(() => {
+    const index = KanjiDataCategories.findIndex((c) => c.idPrefix === idPrefix)
+    return [KanjiDataCategories[index], index]
+  }, [idPrefix])
+
   return (
-    <main className="flex justify-center">
+    <main
+      className={`flex justify-center  ${categoryIndex % 2 === 0 ? "bg-blue-100" : "bg-red-100"}`}
+    >
       <section className="w-11/12 text-center">
         <div className="mt-4 flex gap-8 justify-center">
           <button
@@ -99,6 +110,9 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
             次に進む＞＞＞
           </button>
         </div>
+        <p className="text-5xl text-center mt-4">
+          {category.idPrefix}. {category.title}
+        </p>
         <p className="text-xl text-center mt-4">今日勉強した漢字数：{todayStudyCount}</p>
         <h2 className="text-center text-6xl my-4">
           問題{data.id}({index + 1}/{questions.length})
