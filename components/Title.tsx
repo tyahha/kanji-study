@@ -1,6 +1,6 @@
 import { useAppContext } from "@/context"
 import { Kanji, KanjiData, KanjiDataCategories } from "@/data/kanji"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { getTodayStudyCount, loadHistories, loadLastAnsweredId } from "@/logics/history"
 import dayjs from "dayjs"
 
@@ -40,6 +40,7 @@ const pickRecentWrongs = (day: dayjs.Dayjs) => {
 
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
+  const [isOnlyWrongs, setIsOnlyWrongs] = useState(false)
   const [
     {
       indexForContinue,
@@ -80,6 +81,17 @@ export const TitleView = () => {
     })
   }, [])
   const [categoryIndex, setCategoryIndex] = useState(0)
+  const filteredKanjiData = useMemo(() => {
+    if (!isOnlyWrongs) return KanjiData
+
+    return KanjiData.filter((k) => {
+      const history = loadHistories()
+      const h = history[k.id]
+      if (!h) return false
+
+      return !!h.find((e) => !e.isCorrect)
+    })
+  }, [isOnlyWrongs])
 
   return (
     <main className="mt-16">
@@ -87,25 +99,43 @@ export const TitleView = () => {
       <h2 className="text-center mt-12 text-4xl">
         毎日の学習(本日勉強した漢字の数：{todayStudyCount})
       </h2>
+      <div className="text-center mt-4 text-xl">
+        <span className="p-2 bg-blue-300">
+          <input
+            className="mr-2"
+            id="isOnlyWrongs"
+            type="checkbox"
+            checked={isOnlyWrongs}
+            onChange={(e) => setIsOnlyWrongs(e.target.checked)}
+          />
+          <label htmlFor="isOnlyWrongs">間違えたところだけ</label>
+        </span>
+      </div>
       <div className="flex justify-center gap-1 mt-4">
         <button
           onClick={() => {
-            setQuestions(KanjiData)
+            setQuestions(filteredKanjiData)
             setIndex(0)
             setMode("question")
           }}
-          className="bg-blue-500 text-white font-bold py-4 rounded hover:bg-blue-700 text-2xl w-1/4"
+          disabled={filteredKanjiData.length <= 0}
+          className={`bg-blue-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
+            filteredKanjiData.length <= 0 ? "opacity-50" : "hover:bg-blue-700"
+          }`}
         >
           初めから
         </button>
         <button
           onClick={() => {
-            setQuestions(KanjiData)
+            setQuestions(filteredKanjiData)
             setIndex(indexForContinue)
             setMode("question")
           }}
+          disabled={indexForContinue === 0 || filteredKanjiData.length <= 0}
           className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
-            indexForContinue === 0 ? "opacity-50" : "hover:bg-green-700"
+            indexForContinue === 0 || filteredKanjiData.length <= 0
+              ? "opacity-50"
+              : "hover:bg-green-700"
           }`}
         >
           続きから
@@ -116,13 +146,16 @@ export const TitleView = () => {
           onClick={() => {
             const category = KanjiDataCategories[categoryIndex]
             const idToFind = `${category.idPrefix}-1`
-            const index = KanjiData.findIndex((k) => k.id === idToFind)
-            setQuestions(KanjiData)
+            const index = filteredKanjiData.findIndex((k) => k.id === idToFind)
+            setQuestions(filteredKanjiData)
             setIndex(index < 0 ? 0 : index)
             setMode("question")
           }}
+          disabled={indexForContinue === 0 || filteredKanjiData.length <= 0}
           className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
-            indexForContinue === 0 ? "opacity-50" : "hover:bg-green-700"
+            indexForContinue === 0 || filteredKanjiData.length <= 0
+              ? "opacity-50"
+              : "hover:bg-green-700"
           }`}
         >
           選んで始める
