@@ -102,7 +102,7 @@ export const KanjiData9: Kanji[] = [
   {
     id: "9-16",
     sentence: "高い壁画にぶつかる。",
-    kanji: "壁画",
+    kanji: "壁",
     kana: "かべ",
     questionType: "write",
   },
@@ -146,7 +146,7 @@ export const KanjiData9: Kanji[] = [
   {
     id: "9-24",
     sentence: "城下の本丸を攻める。",
-    kanji: "城下",
+    kanji: "城",
     kana: "しろ",
     questionType: "write",
   },
