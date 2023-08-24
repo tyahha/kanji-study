@@ -4,6 +4,9 @@ import { getTodayStudyCount, saveHistory, saveHistoryAtReview } from "@/logics/h
 import { useAppContext } from "@/context"
 import { Histories } from "@/components/Histories"
 import { DrawArea } from "@/components/DrawArea"
+import { Shippori_Mincho_B1 } from "@next/font/google"
+
+const font = Shippori_Mincho_B1({ weight: "400", subsets: ["latin"] })
 
 type Props = {
   data: Kanji
@@ -148,7 +151,7 @@ export const KanjiQuestion = ({ data, onPrev, onNext, onReturnTitle }: Props) =>
             答えを見る
           </button>
         </div>
-        <p className="bg-gray-100 text-center py-16 my-4">
+        <p className={`bg-gray-100 text-center py-16 my-4 ${font.className}`}>
           <span className="text-6xl">{s1} </span>
           <span className="font-bold underline text-6xl underline-offset-[8px]">{word}</span>
           <span className="text-6xl"> {s2}</span>
