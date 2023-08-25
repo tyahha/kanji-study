@@ -41,6 +41,7 @@ const pickRecentWrongs = (day: dayjs.Dayjs) => {
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
   const [isOnlyWrongs, setIsOnlyWrongs] = useState(false)
+  const [enableWrongsCount, setEnabledWrongsCount] = useState(1)
   const [
     {
       indexForContinue,
@@ -89,9 +90,9 @@ export const TitleView = () => {
       const h = history[k.id]
       if (!h) return false
 
-      return !!h.find((e) => !e.isCorrect)
+      return h.filter((e) => !e.isCorrect).length >= enableWrongsCount
     })
-  }, [isOnlyWrongs])
+  }, [isOnlyWrongs, enableWrongsCount])
 
   return (
     <main className="mt-16">
@@ -108,7 +109,17 @@ export const TitleView = () => {
             checked={isOnlyWrongs}
             onChange={(e) => setIsOnlyWrongs(e.target.checked)}
           />
-          <label htmlFor="isOnlyWrongs">間違えたところだけ</label>
+          <select
+            value={enableWrongsCount}
+            onChange={(e) => setEnabledWrongsCount(Number(e.target.value))}
+          >
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+          </select>
+          <label htmlFor="isOnlyWrongs">回以上間違えたところだけ</label>
         </span>
       </div>
       <div className="flex justify-center gap-1 mt-4">
