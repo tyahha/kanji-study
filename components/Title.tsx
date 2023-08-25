@@ -3,6 +3,7 @@ import { Kanji, KanjiData, KanjiDataCategories } from "@/data/kanji"
 import { useEffect, useMemo, useState } from "react"
 import { getTodayStudyCount, loadHistories, loadLastAnsweredId } from "@/logics/history"
 import dayjs from "dayjs"
+import { defaultAppSettings, loadSettings, saveSettings } from "@/logics/settings"
 
 const pickWrongs = (day: dayjs.Dayjs) => {
   const histories = loadHistories()
@@ -40,8 +41,45 @@ const pickRecentWrongs = (day: dayjs.Dayjs) => {
 
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
-  const [isOnlyWrongs, setIsOnlyWrongs] = useState(false)
-  const [enableWrongsCount, setEnabledWrongsCount] = useState(1)
+  const [{ isOnlyWrongs, enableWrongsCount, selectedCategoryIdPrefix }, setSettings] =
+    useState(defaultAppSettings)
+  useEffect(() => {
+    setSettings(loadSettings())
+  }, [])
+  const setIsOnlyWrongs = (v: boolean) => {
+    setSettings((s) => {
+      const n = {
+        ...s,
+        isOnlyWrongs: v,
+      }
+      saveSettings(n)
+      return n
+    })
+  }
+  const setEnabledWrongsCount = (v: number) => {
+    setSettings((s) => {
+      const n = {
+        ...s,
+        enableWrongsCount: v,
+      }
+      saveSettings(n)
+      return n
+    })
+  }
+  const setCategoryIndex = (v: number) => {
+    setSettings((s) => {
+      const n = {
+        ...s,
+        selectedCategoryIdPrefix: KanjiDataCategories[v].idPrefix,
+      }
+      saveSettings(n)
+      return n
+    })
+  }
+  const categoryIndex = useMemo(() => {
+    const index = KanjiDataCategories.findIndex((c) => c.idPrefix === selectedCategoryIdPrefix)
+    return index < 0 ? 0 : index
+  }, [selectedCategoryIdPrefix])
   const [
     {
       indexForContinue,
@@ -81,7 +119,6 @@ export const TitleView = () => {
       todayStudyCount: getTodayStudyCount(),
     })
   }, [])
-  const [categoryIndex, setCategoryIndex] = useState(0)
   const filteredKanjiData = useMemo(() => {
     if (!isOnlyWrongs) return KanjiData
 
