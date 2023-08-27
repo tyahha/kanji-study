@@ -1,9 +1,17 @@
 import { useAppContext } from "@/context"
 import { Kanji, KanjiData, KanjiDataCategories } from "@/data/kanji"
 import { useEffect, useMemo, useState } from "react"
-import { getTodayStudyCount, loadHistories, loadLastAnsweredId } from "@/logics/history"
+import {
+  getTodayStudyCount,
+  loadHistories,
+  loadLastAnsweredId,
+} from "@/logics/history"
 import dayjs from "dayjs"
-import { defaultAppSettings, loadSettings, saveSettings } from "@/logics/settings"
+import {
+  defaultAppSettings,
+  loadSettings,
+  saveSettings,
+} from "@/logics/settings"
 
 const pickWrongs = (day: dayjs.Dayjs) => {
   const histories = loadHistories()
@@ -13,12 +21,20 @@ const pickWrongs = (day: dayjs.Dayjs) => {
     const kanji = KanjiData.find((k) => k.id === id)
     if (
       kanji &&
-      history.find((h) => !h.isCorrect && dayjs(h.datetime).format("YYYYMMDD") === baseDay)
+      history.find(
+        (h) => !h.isCorrect && dayjs(h.datetime).format("YYYYMMDD") === baseDay,
+      )
     ) {
       ret.push(kanji)
     }
   })
   return ret
+}
+
+const pickNoStudy = () => {
+  const histories = loadHistories()
+  const ids = Object.keys(histories)
+  return KanjiData.filter((d) => !ids.includes(d.id))
 }
 
 const pickRecentWrongs = (day: dayjs.Dayjs) => {
@@ -41,8 +57,10 @@ const pickRecentWrongs = (day: dayjs.Dayjs) => {
 
 export const TitleView = () => {
   const { setMode, setQuestions, setIndex } = useAppContext()
-  const [{ isOnlyWrongs, enableWrongsCount, selectedCategoryIdPrefix }, setSettings] =
-    useState(defaultAppSettings)
+  const [
+    { isOnlyWrongs, enableWrongsCount, selectedCategoryIdPrefix },
+    setSettings,
+  ] = useState(defaultAppSettings)
   useEffect(() => {
     setSettings(loadSettings())
   }, [])
@@ -77,7 +95,9 @@ export const TitleView = () => {
     })
   }
   const categoryIndex = useMemo(() => {
-    const index = KanjiDataCategories.findIndex((c) => c.idPrefix === selectedCategoryIdPrefix)
+    const index = KanjiDataCategories.findIndex(
+      (c) => c.idPrefix === selectedCategoryIdPrefix,
+    )
     return index < 0 ? 0 : index
   }, [selectedCategoryIdPrefix])
   const [
@@ -85,6 +105,7 @@ export const TitleView = () => {
       indexForContinue,
       recentWrongs,
       todayWrongs,
+      noStudies,
       yesterdayWrongs,
       twoDaysAgoWrongs,
       todayStudyCount,
@@ -94,6 +115,7 @@ export const TitleView = () => {
     indexForContinue: number
     recentWrongs: Kanji[]
     todayWrongs: Kanji[]
+    noStudies: Kanji[]
     yesterdayWrongs: Kanji[]
     twoDaysAgoWrongs: Kanji[]
     todayStudyCount: number
@@ -101,6 +123,7 @@ export const TitleView = () => {
     indexForContinue: 0,
     recentWrongs: [],
     todayWrongs: [],
+    noStudies: [],
     yesterdayWrongs: [],
     twoDaysAgoWrongs: [],
     todayStudyCount: 0,
@@ -114,6 +137,7 @@ export const TitleView = () => {
       indexForContinue: KanjiData.length <= continueIndex ? 0 : continueIndex,
       recentWrongs: pickRecentWrongs(dayjs()),
       todayWrongs: pickWrongs(dayjs()),
+      noStudies: pickNoStudy(),
       yesterdayWrongs: pickWrongs(dayjs().subtract(1, "day")),
       twoDaysAgoWrongs: pickWrongs(dayjs().subtract(2, "day")),
       todayStudyCount: getTodayStudyCount(),
@@ -167,7 +191,7 @@ export const TitleView = () => {
             setMode("question")
           }}
           disabled={filteredKanjiData.length <= 0}
-          className={`bg-blue-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
+          className={`bg-blue-500 text-white font-bold py-4 rounded text-2xl w-1/6 ${
             filteredKanjiData.length <= 0 ? "opacity-50" : "hover:bg-blue-700"
           }`}
         >
@@ -179,14 +203,35 @@ export const TitleView = () => {
             setIndex(indexForContinue)
             setMode("question")
           }}
-          disabled={indexForContinue === 0 || filteredKanjiData.length <= 0}
-          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/4 ${
-            indexForContinue === 0 || filteredKanjiData.length <= 0
+          disabled={
+            indexForContinue === 0 ||
+            isOnlyWrongs ||
+            filteredKanjiData.length <= 0
+          }
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/6 ${
+            indexForContinue === 0 ||
+            isOnlyWrongs ||
+            filteredKanjiData.length <= 0
               ? "opacity-50"
               : "hover:bg-green-700"
           }`}
         >
           続きから
+        </button>
+        <button
+          onClick={() => {
+            setQuestions(noStudies)
+            setIndex(indexForContinue)
+            setMode("question")
+          }}
+          disabled={isOnlyWrongs || noStudies.length <= 0}
+          className={`bg-green-500 text-white font-bold py-4 rounded text-2xl w-1/6 ${
+            isOnlyWrongs || noStudies.length <= 0
+              ? "opacity-50"
+              : "hover:bg-green-700"
+          }`}
+        >
+          未学習のみ
         </button>
       </div>
       <div className="flex justify-center gap-1 mt-4">
