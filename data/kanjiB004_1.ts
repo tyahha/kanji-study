@@ -113,8 +113,8 @@ export const KanjiDataB4_1: Kanji[] = [
   },
   {
     id: "B4_1-16",
-    sentence: "先客万来。",
-    kanji: "先客",
+    sentence: "千客万来。",
+    kanji: "千客",
     kana: "センキャク",
     questionType: "write",
   },
