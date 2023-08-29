@@ -248,7 +248,7 @@ export const KanjiDataB4_1: Kanji[] = [
     id: "B4_1-35",
     sentence: "発売を始める。",
     kanji: "発売",
-    kana: "ハツパイ",
+    kana: "ハツバイ",
     questionType: "write",
   },
 ]
