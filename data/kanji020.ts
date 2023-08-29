@@ -211,8 +211,8 @@ export const KanjiData20: Kanji[] = [
   },
   {
     id: "20-30",
-    sentence: "生地が割ける。",
-    kanji: "割ける",
+    sentence: "生地が裂ける。",
+    kanji: "裂ける",
     kana: "さける",
     questionType: "write",
   },
