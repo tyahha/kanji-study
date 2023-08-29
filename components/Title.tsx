@@ -221,7 +221,7 @@ export const TitleView = () => {
         <button
           onClick={() => {
             setQuestions(noStudies)
-            setIndex(indexForContinue)
+            setIndex(0)
             setMode("question")
           }}
           disabled={isOnlyWrongs || noStudies.length <= 0}
