@@ -16,6 +16,16 @@ import { KanjiData11, KanjiData11Category } from "@/data/kanji011"
 import { KanjiData12, KanjiData12Category } from "@/data/kanji012"
 import { KanjiDataB3_1, KanjiDataB3_1Category } from "@/data/kanjiB003_1"
 import { KanjiDataB3_2, KanjiDataB3_2Category } from "@/data/kanjiB003_2"
+import { KanjiData20, KanjiData20Category } from "@/data/kanji020"
+import { KanjiData19, KanjiData19Category } from "@/data/kanji019"
+import { KanjiData18, KanjiData18Category } from "@/data/kanji018"
+import { KanjiData17, KanjiData17Category } from "@/data/kanji017"
+import { KanjiDataB4_2, KanjiDataB4_2Category } from "@/data/kanjiB004_2"
+import { KanjiDataB4_1, KanjiDataB4_1Category } from "@/data/kanjiB004_1"
+import { KanjiData16, KanjiData16Category } from "@/data/kanji016"
+import { KanjiData15, KanjiData15Category } from "@/data/kanji015"
+import { KanjiData14, KanjiData14Category } from "@/data/kanji014"
+import { KanjiData13, KanjiData13Category } from "@/data/kanji013"
 
 type QuestionType = "read" | "write"
 
@@ -46,6 +56,16 @@ export const KanjiDataCategories = [
   KanjiData12Category,
   KanjiDataB3_1Category,
   KanjiDataB3_2Category,
+  KanjiData13Category,
+  KanjiData14Category,
+  KanjiData15Category,
+  KanjiData16Category,
+  KanjiDataB4_1Category,
+  KanjiDataB4_2Category,
+  KanjiData17Category,
+  KanjiData18Category,
+  KanjiData19Category,
+  KanjiData20Category,
 ]
 
 export const KanjiData: Kanji[] = [
@@ -67,4 +87,14 @@ export const KanjiData: Kanji[] = [
   ...KanjiData12,
   ...KanjiDataB3_1,
   ...KanjiDataB3_2,
+  ...KanjiData13,
+  ...KanjiData14,
+  ...KanjiData15,
+  ...KanjiData16,
+  ...KanjiDataB4_1,
+  ...KanjiDataB4_2,
+  ...KanjiData17,
+  ...KanjiData18,
+  ...KanjiData19,
+  ...KanjiData20,
 ]
